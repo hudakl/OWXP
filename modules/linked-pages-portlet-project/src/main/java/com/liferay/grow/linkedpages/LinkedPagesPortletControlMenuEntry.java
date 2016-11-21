@@ -20,7 +20,7 @@ import com.liferay.product.navigation.control.menu.constants.ProductNavigationCo
     immediate = true,
     property = {
         "product.navigation.control.menu.category.key=" + ProductNavigationControlMenuCategoryKeys.USER,
-        "product.navigation.control.menu.category.order:Integer=300",
+        "product.navigation.control.menu.category.order:Integer=500",
     },
     service = ProductNavigationControlMenuEntry.class
 )

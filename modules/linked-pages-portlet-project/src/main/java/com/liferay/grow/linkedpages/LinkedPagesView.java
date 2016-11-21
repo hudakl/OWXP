@@ -54,7 +54,6 @@ public class LinkedPagesView {
 				content = content.substring(content.indexOf("]]")+2);
 			}
 
-			reverseOrder();
 		} catch (PortalException e) {
 			_log.debug(e.getMessage());
 		}
@@ -95,17 +94,6 @@ public class LinkedPagesView {
 		else {
 			return "";
 		}
-	}
-
-	private void reverseOrder() {
-		HashMap<String, String> temp = new HashMap<String, String>();
-
-		for(String key: _linkedPages.keySet()) {
-			temp.put(key, _linkedPages.get(key));
-		}
-
-		_linkedPages.clear();
-		_linkedPages.putAll(temp);
 	}
 
 	private HashMap<String, String> _linkedPages;
