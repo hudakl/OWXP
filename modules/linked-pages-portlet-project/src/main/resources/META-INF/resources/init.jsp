@@ -9,6 +9,7 @@
 
 <%@ page import="com.liferay.grow.linkedpages.LinkedPagesView" %>
 <%@ page import="com.liferay.grow.linkedpages.util.LinkedPagesPortletKeys" %>
+<%@ page import="com.liferay.grow.linkedpages.util.PageLink" %>
 <%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %>
 <%@ page import="com.liferay.portal.kernel.portlet.PortletURLFactoryUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.PortalUtil" %>

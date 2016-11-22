@@ -1,8 +1,10 @@
 package com.liferay.grow.linkedpages;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import com.liferay.grow.linkedpages.util.PageLink;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -20,7 +22,7 @@ public class LinkedPagesView {
 	 * https://grow.liferay.com/group/guest/people/-/wiki/Grow/Grow+navigation+ADT
 	 */
 	public LinkedPagesView(ThemeDisplay themeDisplay) {
-		_linkedPages = new HashMap<String, String>();
+		_linkedPages = new ArrayList<PageLink>();
 		_themeDisplay = themeDisplay;
 
 		long groupId = _themeDisplay.getScopeGroupId();
@@ -29,16 +31,8 @@ public class LinkedPagesView {
 		fillLinkedPages(groupId, "Main", wikiPageTitle);
 	}
 
-	public HashMap getLinkedPages() {
+	public ArrayList<PageLink> getLinkedPages() {
 		return _linkedPages;
-	}
-
-	public Set<String> getPageTitles() {
-		return _linkedPages.keySet();
-	}
-
-	public String getLink(String title) {
-		return _linkedPages.get(title);
 	}
 
 	public void fillLinkedPages(long groupId, String nodeTitle, String pageTitle) {
@@ -50,7 +44,7 @@ public class LinkedPagesView {
 
 			while(content.indexOf("]]") > 0) {
 				String link = content.substring(content.indexOf("[[")+2, content.indexOf("]]"));
-				_linkedPages.put(link.split("\\|")[1], link.split("\\|")[0]);
+				_linkedPages.add(new PageLink(link.split("\\|")[1], link.split("\\|")[0]));
 				content = content.substring(content.indexOf("]]")+2);
 			}
 
@@ -96,7 +90,7 @@ public class LinkedPagesView {
 		}
 	}
 
-	private HashMap<String, String> _linkedPages;
+	private ArrayList<PageLink> _linkedPages;
 	private ThemeDisplay _themeDisplay;
 	private Log _log = LogFactoryUtil.getLog(LinkedPagesView.class);
 }

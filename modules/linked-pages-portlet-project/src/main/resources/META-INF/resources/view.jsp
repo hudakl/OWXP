@@ -30,11 +30,11 @@ LinkedPagesView linkedPagesView = new LinkedPagesView(themeDisplay);
 					<div class="list-group-item">
 						<ul class="nav nav-equal-height">
 							<%
-							for (String pageTitle : linkedPagesView.getPageTitles()) {
+							for (PageLink pageLink : linkedPagesView.getLinkedPages()) {
 							%>
 								<li>
-									<a href="<%= linkedPagesView.getLink(pageTitle) %>">
-										<%= pageTitle %>
+									<a href="<%= pageLink.getPageLink() %>">
+										<%= pageLink.getPageTitle() %>
 									</a>
 								</li>
 							<%
