@@ -6,7 +6,7 @@ String portletNamespace = PortalUtil.getPortletNamespace(LinkedPagesPortletKeys.
 LinkedPagesView linkedPagesView = new LinkedPagesView(themeDisplay);
 %>
 
-<div id="#wrapper">
+<div>
 	<div class="closed lfr-admin-panel lfr-product-menu-panel lfr-simulation-panel sidenav-fixed sidenav-menu-slider sidenav-right" id="<%= portletNamespace %>linkedPagesPanelId">
 		<div class="product-menu sidebar sidebar-inverse sidenav-menu">
 
@@ -14,6 +14,8 @@ LinkedPagesView linkedPagesView = new LinkedPagesView(themeDisplay);
 				<span><liferay-ui:message key="linked_pages_portlet_project_LinkedPagesPortlet.caption"/></span>
 
 				<aui:icon cssClass="icon-monospaced sidenav-close" image="times" markupView="lexicon" url="javascript:;" />
+
+				<div class="sidebar-body"></div>
 			</h4>
 
 			<c:choose>

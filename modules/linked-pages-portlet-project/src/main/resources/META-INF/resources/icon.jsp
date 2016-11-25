@@ -8,13 +8,22 @@ PortletURL linkedPagesPanelURL = PortletURLFactoryUtil.create(request, LinkedPag
 linkedPagesPanelURL.setWindowState(LiferayWindowState.EXCLUSIVE);
 %>
 
+<script src="side-navigation.js"></script>
+
 <li class="control-menu-nav-item">
-		<a class="control-menu-icon lfr-portal-tooltip product-menu-toggle sidenav-toggler" 
-			data-qa-id="Linked Pages" data-content="body" data-title="Linked Pages" data-toggle="sidenav" 
-			data-url="<%= linkedPagesPanelURL.toString() %>"
-			href="#<%= portletNamespace %>linkedPagesPanelId" id="<%= portletNamespace %>linkedPagesToggleId">
+	<a class="control-menu-icon lfr-portal-tooltip product-menu-toggle sidenav-toggler" 
+		data-qa-id="Linked Pages" data-content="body" data-title="Linked Pages"
+		data-url="<%= linkedPagesPanelURL.toString() %>"
+		href="#<%= portletNamespace %>linkedPagesPanelId" id="<%= portletNamespace %>linkedPagesToggleId">
 
-			<aui:icon image="link" markupView="lexicon" />
+		<aui:icon image="link" markupView="lexicon" />
 
-		</a>
+	</a>
 </li>
+
+<script>
+	$('.sidenav-toggler').sideNavigation({
+		url: '/view.jsp',
+		width: '300px'
+	});
+</script>
