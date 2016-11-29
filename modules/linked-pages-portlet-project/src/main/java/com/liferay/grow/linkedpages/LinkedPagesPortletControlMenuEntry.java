@@ -9,6 +9,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -45,6 +46,12 @@ public class LinkedPagesPortletControlMenuEntry extends BaseJSPProductNavigation
 	public boolean isShow(HttpServletRequest request) throws PortalException {
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
+
+		Layout layout = themeDisplay.getLayout();
+
+		if (layout.isTypeControlPanel()) {
+			return false;
+		}
 
 		if (themeDisplay.isImpersonated()) {
 			return true;
