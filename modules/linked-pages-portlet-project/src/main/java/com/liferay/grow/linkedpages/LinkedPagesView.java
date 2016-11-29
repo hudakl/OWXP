@@ -70,7 +70,7 @@ public class LinkedPagesView {
 			else {
 				wikiPageTitle = _themeDisplay.getLayout().getFriendlyURL().replace("/", "").replace("%3CQUESTION%3E", "?");
 			}
-		} else {
+		} else if (explodedURL.length > 1) {
 			wikiPageTitle = explodedURL[explodedURL.length-1].replace("+", " ");
 			wikiPageTitle = wikiPageTitle.split("\\?")[0].replace("%3CQUESTION%3E", "?");
 		}
