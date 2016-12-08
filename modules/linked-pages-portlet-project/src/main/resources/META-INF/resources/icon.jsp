@@ -24,6 +24,6 @@ linkedPagesPanelURL.setWindowState(LiferayWindowState.EXCLUSIVE);
 <script>
 	$('.sidenav-toggler').sideNavigation({
 		url: '/view.jsp',
-		width: '300px'
+		width: '320px'
 	});
 </script>
