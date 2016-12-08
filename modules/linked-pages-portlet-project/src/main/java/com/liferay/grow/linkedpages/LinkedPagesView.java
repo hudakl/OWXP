@@ -28,7 +28,7 @@ public class LinkedPagesView {
 		long groupId = _themeDisplay.getScopeGroupId();
 		String wikiPageTitle = getWikiPageTitle(_themeDisplay.getURLCurrent());
 
-		fillLinkedPages(groupId, "Main", wikiPageTitle);
+		fillLinkedPages(groupId, "Grow", wikiPageTitle);
 	}
 
 	public ArrayList<PageLink> getLinkedPages() {
