@@ -37,14 +37,18 @@ public class LinkedPagesView {
 
 	public void fillLinkedPages(long groupId, String nodeTitle, String pageTitle) {
 		try {
-			long nodeId = WikiNodeLocalServiceUtil.getNode(groupId, nodeTitle).getNodeId();
+			long nodeId = WikiNodeLocalServiceUtil.getNode(
+				groupId, nodeTitle).getNodeId();
 
-			WikiPage wikiPage = WikiPageLocalServiceUtil.getPage(nodeId, pageTitle);
+			WikiPage wikiPage = WikiPageLocalServiceUtil.getPage(
+				nodeId, pageTitle);
 			String content = wikiPage.getContent();
 
 			while(content.indexOf("]]") > 0) {
-				String link = content.substring(content.indexOf("[[")+2, content.indexOf("]]"));
-				_linkedPages.add(new PageLink(link.split("\\|")[1], link.split("\\|")[0]));
+				String link = content.substring(
+					content.indexOf("[[")+2, content.indexOf("]]"));
+				_linkedPages.add(
+					new PageLink(link.split("\\|")[1], link.split("\\|")[0]));
 				content = content.substring(content.indexOf("]]")+2);
 			}
 
@@ -59,20 +63,32 @@ public class LinkedPagesView {
 		String wikiPageTitle = "";
 
 		if(explodedURL.length == 4) {
-			if(url.contains("_com_liferay_wiki_web_portlet_WikiPortlet_parentTitle")) {
-				rawPageTitle = getGETParameterValue(url, "_com_liferay_wiki_web_portlet_WikiPortlet_parentTitle");
-				wikiPageTitle = rawPageTitle.replace("%20", " ").replace("%3CQUESTION%3E", "?");
+			if(url.contains(
+				"_com_liferay_wiki_web_portlet_WikiPortlet_parentTitle")) {
+
+				rawPageTitle = getGETParameterValue(
+					url,
+					"_com_liferay_wiki_web_portlet_WikiPortlet_parentTitle");
+				wikiPageTitle = rawPageTitle.replace(
+					"%20", " ").replace("%3CQUESTION%3E", "?");
 			}
-			else if (url.contains("p_r_p__http%3A%2F%2Fwww.liferay.com%2Fpublic-render-parameters%2Fwiki_title")) {
-				rawPageTitle = getGETParameterValue(url, "p_r_p__http%3A%2F%2Fwww.liferay.com%2Fpublic-render-parameters%2Fwiki_title");
-				wikiPageTitle = rawPageTitle.replace("%20", " ").replace("%3CQUESTION%3E", "?");
+			else if (
+				url.contains("p_r_p__http%3A%2F%2Fwww.liferay.com%2Fpublic-render-parameters%2Fwiki_title")) {
+
+				rawPageTitle = getGETParameterValue(
+					url, "p_r_p__http%3A%2F%2Fwww.liferay.com%2Fpublic-render-parameters%2Fwiki_title");
+				wikiPageTitle = rawPageTitle.replace(
+					"%20", " ").replace("%3CQUESTION%3E", "?");
 			}
 			else {
-				wikiPageTitle = _themeDisplay.getLayout().getFriendlyURL().replace("/", "").replace("%3CQUESTION%3E", "?");
+				wikiPageTitle = _themeDisplay.getLayout().getFriendlyURL()
+					.replace("/", "").replace("%3CQUESTION%3E", "?");
 			}
 		} else if (explodedURL.length > 1) {
-			wikiPageTitle = explodedURL[explodedURL.length-1].replace("+", " ");
-			wikiPageTitle = wikiPageTitle.split("\\?")[0].replace("%3CQUESTION%3E", "?");
+			wikiPageTitle = 
+				explodedURL[explodedURL.length-1].replace("+", " ");
+			wikiPageTitle = 
+				wikiPageTitle.split("\\?")[0].replace("%3CQUESTION%3E", "?");
 		}
 
 		return wikiPageTitle;

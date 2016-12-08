@@ -25,7 +25,8 @@ import com.liferay.product.navigation.control.menu.constants.ProductNavigationCo
     },
     service = ProductNavigationControlMenuEntry.class
 )
-public class LinkedPagesPortletControlMenuEntry extends BaseJSPProductNavigationControlMenuEntry {
+public class LinkedPagesPortletControlMenuEntry 
+	extends BaseJSPProductNavigationControlMenuEntry {
 
 	@Override
 	public String getIconJspPath() {
