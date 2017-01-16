@@ -14,6 +14,10 @@ linkedPagesPanelURL.setWindowState(LiferayWindowState.EXCLUSIVE);
 	<a class="control-menu-icon lfr-portal-tooltip product-menu-toggle sidenav-toggler" 
 		data-qa-id="Linked Pages" data-content="body" data-title="Linked Pages"
 		data-url="<%= linkedPagesPanelURL.toString() %>"
+		data-toggle="sidenav"
+		data-type="fixed-push"
+		data-open-class="open-admin-panel"
+		data-target="#<%= portletNamespace %>linkedPagesPanelId"
 		href="#<%= portletNamespace %>linkedPagesPanelId" id="<%= portletNamespace %>linkedPagesToggleId">
 
 		<aui:icon image="link" markupView="lexicon" />
