@@ -47,8 +47,12 @@ public class LinkedPagesView {
 			while(content.indexOf("]]") > 0) {
 				String link = content.substring(
 					content.indexOf("[[")+2, content.indexOf("]]"));
-				_linkedPages.add(
-					new PageLink(link.split("\\|")[1], link.split("\\|")[0]));
+
+				if (link.contains(_GROW_URL)) {
+					_linkedPages.add(
+						new PageLink(link.split("\\|")[1], link.split("\\|")[0]));
+				}
+
 				content = content.substring(content.indexOf("]]")+2);
 			}
 
@@ -106,6 +110,7 @@ public class LinkedPagesView {
 		}
 	}
 
+	private static final String _GROW_URL = "grow.liferay.com";
 	private ArrayList<PageLink> _linkedPages;
 	private ThemeDisplay _themeDisplay;
 	private Log _log = LogFactoryUtil.getLog(LinkedPagesView.class);
