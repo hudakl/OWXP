@@ -1,15 +1,15 @@
 package com.liferay.grow.linkedpages;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.liferay.grow.linkedpages.util.PageLink;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.service.WikiNodeLocalServiceUtil;
 import com.liferay.wiki.service.WikiPageLocalServiceUtil;
@@ -23,12 +23,14 @@ public class LinkedPagesView {
 	 */
 	public LinkedPagesView(ThemeDisplay themeDisplay) {
 		_linkedPages = new ArrayList<PageLink>();
-		_themeDisplay = themeDisplay;
+		HttpServletRequest request = themeDisplay.getRequest();
 
-		long groupId = _themeDisplay.getScopeGroupId();
-		String wikiPageTitle = getWikiPageTitle(_themeDisplay.getURLCurrent());
+		String wikiNode = ParamUtil.getString(request, "p_r_p__http://www.liferay.com/public-render-parameters/wiki_nodeName");
+		String wikiTitle = ParamUtil.getString(request, "p_r_p__http://www.liferay.com/public-render-parameters/wiki_title");
+		
+		long groupId = themeDisplay.getScopeGroupId();
 
-		fillLinkedPages(groupId, "Grow", wikiPageTitle);
+		fillLinkedPages(groupId, wikiNode, wikiTitle);
 	}
 
 	public ArrayList<PageLink> getLinkedPages() {
@@ -61,57 +63,7 @@ public class LinkedPagesView {
 		}
 	}
 
-	private String getWikiPageTitle(String url) {
-		String[] explodedURL = url.split("/");
-		String rawPageTitle = "";
-		String wikiPageTitle = "";
-
-		if(explodedURL.length == 4) {
-			if(url.contains(
-				"_com_liferay_wiki_web_portlet_WikiPortlet_parentTitle")) {
-
-				rawPageTitle = getGETParameterValue(
-					url,
-					"_com_liferay_wiki_web_portlet_WikiPortlet_parentTitle");
-				wikiPageTitle = rawPageTitle.replace(
-					"%20", " ").replace("%3CQUESTION%3E", "?");
-			}
-			else if (
-				url.contains("p_r_p__http%3A%2F%2Fwww.liferay.com%2Fpublic-render-parameters%2Fwiki_title")) {
-
-				rawPageTitle = getGETParameterValue(
-					url, "p_r_p__http%3A%2F%2Fwww.liferay.com%2Fpublic-render-parameters%2Fwiki_title");
-				wikiPageTitle = rawPageTitle.replace(
-					"%20", " ").replace("%3CQUESTION%3E", "?");
-			}
-			else {
-				wikiPageTitle = _themeDisplay.getLayout().getFriendlyURL()
-					.replace("/", "").replace("%3CQUESTION%3E", "?");
-			}
-		} else if (explodedURL.length > 1) {
-			wikiPageTitle = 
-				explodedURL[explodedURL.length-1].replace("+", " ");
-			wikiPageTitle = 
-				wikiPageTitle.split("\\?")[0].replace("%3CQUESTION%3E", "?");
-		}
-
-		return wikiPageTitle;
-	}
-
-	private String getGETParameterValue(String url, String parameterName) {
-		String parameterValue = StringUtil.extractLast(url, parameterName + "=");
-		parameterValue = StringUtil.extractFirst(parameterValue, "&");
-
-		if (parameterValue != null) {
-			return parameterValue;
-		}
-		else {
-			return "";
-		}
-	}
-
 	private static final String _GROW_URL = "grow.liferay.com";
 	private ArrayList<PageLink> _linkedPages;
-	private ThemeDisplay _themeDisplay;
 	private Log _log = LogFactoryUtil.getLog(LinkedPagesView.class);
 }
