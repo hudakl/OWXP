@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.service.WikiNodeLocalServiceUtil;
@@ -46,20 +47,54 @@ public class LinkedPagesView {
 				nodeId, pageTitle);
 			String content = wikiPage.getContent();
 
-			while(content.indexOf("]]") > 0) {
-				String link = content.substring(
-					content.indexOf("[[")+2, content.indexOf("]]"));
-
-				if (link.contains(_GROW_URL)) {
-					_linkedPages.add(
-						new PageLink(link.split("\\|")[1], link.split("\\|")[0]));
-				}
-
-				content = content.substring(content.indexOf("]]")+2);
+			if (wikiPage.getFormat().equals("creole")) {
+				addLinksCreole(content);
+			}
+			else if (wikiPage.getFormat().equals("html")) {
+				addLinksHTML(content);
+			}
+			else if (wikiPage.getFormat().equals("markdown")) {
+				addLinksCreole(content);
 			}
 
 		} catch (PortalException e) {
 			_log.debug(e.getMessage());
+		}
+	}
+
+	private void addLinksCreole(String content) {
+		while(content.indexOf("]]") > 0) {
+			String link = content.substring(
+				content.indexOf("[[")+2, content.indexOf("|"));
+
+			addLink(link);
+
+			content = content.substring(content.indexOf("]]")+2);
+		}
+	}
+
+	private void addLinksHTML(String content) {
+		while(content.indexOf("</a>") > 0) {
+			String link = content.substring(
+				content.indexOf("href=\"")+6, content.indexOf("\">"));
+
+			addLink(link);
+
+			content = content.substring(content.indexOf("</a>")+4);
+		}
+	}
+
+	private void addLinksMarkdown(String content) {
+	}
+
+	private void addLink(String link) {
+		if (link.contains(_GROW_URL)) {
+			String title = link.substring(link.lastIndexOf('/')+1);
+
+			title = title.replace('+', CharPool.SPACE);
+
+			_linkedPages.add(
+				new PageLink(title, link));
 		}
 	}
 
