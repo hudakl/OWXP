@@ -13,7 +13,7 @@ LinkedPagesView linkedPagesView = new LinkedPagesView(themeDisplay);
 			<div class="sidebar-header">
 				<span><liferay-ui:message key="linked_pages_portlet_project_LinkedPagesPortlet.caption"/></span>
 
-				<aui:icon cssClass="icon-monospaced sidenav-close" image="times" markupView="lexicon" url="javascript:;" />
+				<aui:icon id="sidenavClose" cssClass="icon-monospaced sidenav-close" image="times" markupView="lexicon" url="javascript:;" />
 			</div>
 
 			<div class="sidebar-body"></div>
@@ -49,3 +49,7 @@ LinkedPagesView linkedPagesView = new LinkedPagesView(themeDisplay);
 		</div>
 	</div>
 </div>
+
+<script>
+	$('.sidenav-close').sideNavigation('hide'});
+</script>
