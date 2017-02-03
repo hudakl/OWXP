@@ -1,6 +1,8 @@
 package com.liferay.grow.linkedpages;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,7 +25,7 @@ public class LinkedPagesView {
 	 * https://grow.liferay.com/group/guest/people/-/wiki/Grow/Grow+navigation+ADT
 	 */
 	public LinkedPagesView(ThemeDisplay themeDisplay) {
-		_linkedPages = new ArrayList<PageLink>();
+		_linkedPages = new TreeSet<PageLink>();
 		HttpServletRequest request = themeDisplay.getRequest();
 
 		String wikiNode = ParamUtil.getString(request, "p_r_p__http://www.liferay.com/public-render-parameters/wiki_nodeName");
@@ -35,7 +37,11 @@ public class LinkedPagesView {
 	}
 
 	public ArrayList<PageLink> getLinkedPages() {
-		return _linkedPages;
+		ArrayList<PageLink> linkedPages = new ArrayList<PageLink>();
+
+		linkedPages.addAll(_linkedPages);
+
+		return linkedPages;
 	}
 
 	public void fillLinkedPages(long groupId, String nodeTitle, String pageTitle) {
@@ -99,6 +105,6 @@ public class LinkedPagesView {
 	}
 
 	private static final String _GROW_URL = "grow.liferay.com";
-	private ArrayList<PageLink> _linkedPages;
+	private TreeSet<PageLink> _linkedPages;
 	private Log _log = LogFactoryUtil.getLog(LinkedPagesView.class);
 }
