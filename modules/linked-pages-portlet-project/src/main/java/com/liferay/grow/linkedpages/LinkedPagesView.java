@@ -75,8 +75,8 @@ public class LinkedPagesView {
 
 	private void addLinksHTML(String content) {
 		while(content.indexOf("</a>") > 0) {
-			String link = content.substring(
-				content.indexOf("href=\"")+6, content.indexOf("\">"));
+			String link = content.substring(content.indexOf("href=\"")+6); 
+			link = link.substring(0, link.indexOf("\">"));
 
 			addLink(link);
 
