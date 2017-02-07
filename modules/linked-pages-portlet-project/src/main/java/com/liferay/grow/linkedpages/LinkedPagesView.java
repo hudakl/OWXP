@@ -94,15 +94,18 @@ public class LinkedPagesView {
 	}
 
 	private void addLink(String link) {
-		String title = link.substring(link.lastIndexOf('/')+1);
-
-		title = title.replace('+', CharPool.SPACE);
-
-		_linkedPages.add(
-			new PageLink(title, link));
+		if (!link.contains(_GROW_URL+_PUBLIC_PAGE)) {
+			String title = link.substring(link.lastIndexOf('/')+1);
+	
+			title = title.replace('+', CharPool.SPACE);
+	
+			_linkedPages.add(
+				new PageLink(title, link));
+		}
 	}
 
 	private static final String _GROW_URL = "https://grow.liferay.com/";
+	private static final String _PUBLIC_PAGE = "web";
 	private TreeSet<PageLink> _linkedPages;
 	private Log _log = LogFactoryUtil.getLog(LinkedPagesView.class);
 }
