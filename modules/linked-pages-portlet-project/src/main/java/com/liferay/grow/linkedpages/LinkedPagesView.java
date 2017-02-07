@@ -69,9 +69,9 @@ public class LinkedPagesView {
 	}
 
 	private void addLinksCreole(String content) {
-		while(content.indexOf("]]") > 0) {
-			String link = content.substring(
-				content.indexOf("[[")+2, content.indexOf("|"));
+		while(content.indexOf(_GROW_URL) > 0) {
+			content = content.substring(content.indexOf(_GROW_URL)); 
+			String link = content.substring(0, content.indexOf("|"));
 
 			addLink(link);
 
@@ -80,9 +80,9 @@ public class LinkedPagesView {
 	}
 
 	private void addLinksHTML(String content) {
-		while(content.indexOf("</a>") > 0) {
-			String link = content.substring(content.indexOf("href=\"")+6); 
-			link = link.substring(0, link.indexOf("\">"));
+		while(content.indexOf(_GROW_URL) > 0) {
+			content = content.substring(content.indexOf(_GROW_URL)); 
+			String link = content.substring(0, content.indexOf("\">"));
 
 			addLink(link);
 
@@ -94,17 +94,15 @@ public class LinkedPagesView {
 	}
 
 	private void addLink(String link) {
-		if (link.contains(_GROW_URL)) {
-			String title = link.substring(link.lastIndexOf('/')+1);
+		String title = link.substring(link.lastIndexOf('/')+1);
 
-			title = title.replace('+', CharPool.SPACE);
+		title = title.replace('+', CharPool.SPACE);
 
-			_linkedPages.add(
-				new PageLink(title, link));
-		}
+		_linkedPages.add(
+			new PageLink(title, link));
 	}
 
-	private static final String _GROW_URL = "grow.liferay.com";
+	private static final String _GROW_URL = "https://grow.liferay.com/";
 	private TreeSet<PageLink> _linkedPages;
 	private Log _log = LogFactoryUtil.getLog(LinkedPagesView.class);
 }
