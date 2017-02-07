@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.service.WikiNodeLocalServiceUtil;
 import com.liferay.wiki.service.WikiPageLocalServiceUtil;
@@ -60,7 +61,7 @@ public class LinkedPagesView {
 				addLinksHTML(content);
 			}
 			else if (wikiPage.getFormat().equals("markdown")) {
-				addLinksCreole(content);
+				addLinksMarkdown(content);
 			}
 
 		} catch (PortalException e) {
@@ -91,6 +92,24 @@ public class LinkedPagesView {
 	}
 
 	private void addLinksMarkdown(String content) {
+		content = content.replace(CharPool.NEW_LINE, CharPool.SPACE)
+			.replace(CharPool.CLOSE_BRACKET, CharPool.SPACE);
+
+		String[] contentElements = StringUtil.split(content, CharPool.SPACE);
+
+		for (String element: contentElements) {
+			if (element.contains(_GROW_URL)) {
+				if (element.startsWith("(")) {
+					element = element.substring(1);
+				}
+
+				if (element.endsWith(")")) {
+					element = element.substring(0, element.length()-2);
+				}
+
+				addLink(element);
+			}
+		}
 	}
 
 	private void addLink(String link) {
