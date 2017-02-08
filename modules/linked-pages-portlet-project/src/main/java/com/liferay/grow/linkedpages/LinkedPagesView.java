@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.wiki.model.WikiPage;
@@ -72,7 +73,11 @@ public class LinkedPagesView {
 	private void addLinksCreole(String content) {
 		while(content.indexOf(_GROW_URL) > 0) {
 			content = content.substring(content.indexOf(_GROW_URL)); 
-			String link = content.substring(0, content.indexOf("|"));
+			String link = content.substring(0, content.indexOf("]]"));
+
+			if (link.contains("|")) {
+				link = link.substring(0, link.indexOf("|"));
+			}
 
 			addLink(link);
 
@@ -117,7 +122,7 @@ public class LinkedPagesView {
 			String title = link.substring(link.lastIndexOf('/')+1);
 	
 			title = title.replace('+', CharPool.SPACE);
-	
+
 			_linkedPages.add(
 				new PageLink(title, link));
 		}
