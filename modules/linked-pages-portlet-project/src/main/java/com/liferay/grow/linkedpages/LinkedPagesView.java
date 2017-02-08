@@ -120,8 +120,12 @@ public class LinkedPagesView {
 	private void addLink(String link) {
 		if (!link.contains(_GROW_URL+_PUBLIC_PAGE)) {
 			String title = link.substring(link.lastIndexOf('/')+1);
-	
+
 			title = title.replace('+', CharPool.SPACE);
+
+			if (title.contains("#section")) {
+				title = title.substring(0, title.indexOf("#section"));
+			}
 
 			_linkedPages.add(
 				new PageLink(title, link));
