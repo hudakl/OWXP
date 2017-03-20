@@ -29,12 +29,14 @@ public class NotifyCreatorAction implements Action {
 			_sentMail(sender.getEmailAddress(),
 					sender.getFullName(), user.getEmailAddress(), 
 						SUBJECT, analysisEntry.getAnalysisData());
+			
+			return true;
 
 		} catch (Exception px) {
-			return false;
+
 		}
 
-		return true;
+		return false;
 	}
 
 	private void _sentMail(
