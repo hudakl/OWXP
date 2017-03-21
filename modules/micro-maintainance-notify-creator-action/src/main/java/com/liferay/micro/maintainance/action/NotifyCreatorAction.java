@@ -5,6 +5,7 @@ import javax.mail.internet.InternetAddress;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailServiceUtil;
 import com.liferay.micro.maintainance.analysis.model.AnalysisEntry;
+import com.liferay.micro.maintainance.util.VotesJSONSerializer;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
@@ -26,9 +27,11 @@ public class NotifyCreatorAction implements Action {
 				sender = UserLocalServiceUtil.getDefaultUser(companyId);
 			}
 
+			String body = VotesJSONSerializer.toReadableFormat(analysisEntry.getAnalysisData());
+
 			_sentMail(sender.getEmailAddress(),
 					sender.getFullName(), user.getEmailAddress(), 
-						SUBJECT, analysisEntry.getAnalysisData());
+						SUBJECT, body);
 			
 			return true;
 
