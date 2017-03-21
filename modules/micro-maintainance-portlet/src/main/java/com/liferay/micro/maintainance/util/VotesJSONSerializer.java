@@ -16,6 +16,28 @@ public class VotesJSONSerializer {
 		return jsonObject.toString();
 	}
 
+	public static String toReadableFormat(
+			String analysisData) throws JSONException {
+
+		JSONObject jsonObject = _jsonFactory.createJSONObject(
+				analysisData);
+
+		int noVotes = jsonObject.getInt(VoteConstants.NO_DESCRIPTION);
+		int yesVotes = jsonObject.getInt(VoteConstants.YES_DESCRIPTION);
+		int notVoted = jsonObject.getInt(VoteConstants.NOT_VOTED_DESCRIPTION);
+
+		int total = notVoted + yesVotes + notVoted;
+
+		return String.format("%d (%.2f %%) voted '%s' \n"
+				+ "%d (%.2f %%) voted '%s' \n"
+				+ "%d (%.2f %%) did not vote \n",
+				noVotes, _calculatePercentage(total, noVotes), 
+				VoteConstants.NO_DESCRIPTION,
+				yesVotes, _calculatePercentage(total, yesVotes), 
+				VoteConstants.YES_DESCRIPTION,
+				notVoted, _calculatePercentage(total, notVoted));
+	}
+
 	public static String updateVotes(
 			String analysisData, int previousVote, int vote) 
 		throws JSONException {
@@ -24,23 +46,23 @@ public class VotesJSONSerializer {
 			analysisData);
 
 		if (previousVote == VoteConstants.NO) {
-			decreaseVote(jsonObject, "no");
+			decreaseVote(jsonObject, VoteConstants.NO_DESCRIPTION);
 		}
 		else if (previousVote == VoteConstants.YES) {
-			decreaseVote(jsonObject, "yes");
+			decreaseVote(jsonObject, VoteConstants.YES_DESCRIPTION);
 		}
 		else if (previousVote == VoteConstants.NOT_VOTED) {
-			decreaseVote(jsonObject, "not_voted");
+			decreaseVote(jsonObject, VoteConstants.NOT_VOTED_DESCRIPTION);
 		}
 
 		if (vote == VoteConstants.NO) {
-			increaseVote(jsonObject, "no");
+			increaseVote(jsonObject, VoteConstants.NO_DESCRIPTION);
 		}
 		else if (vote == VoteConstants.YES) {
-			increaseVote(jsonObject, "yes");
+			increaseVote(jsonObject, VoteConstants.YES_DESCRIPTION);
 		}
 		else if (vote == VoteConstants.NOT_VOTED) {
-			increaseVote(jsonObject, "not_voted");
+			increaseVote(jsonObject, VoteConstants.NOT_VOTED_DESCRIPTION);
 		}
 
 		return jsonObject.toString();
@@ -54,6 +76,14 @@ public class VotesJSONSerializer {
 	private static void decreaseVote(JSONObject jsonObject, String vote) {
 		int votes = jsonObject.getInt(vote);
 		jsonObject.put(vote, -votes);
+	}
+
+	private static double _calculatePercentage(int total, int score) {
+		if(total <= 0 || score <= 0) {
+			return 0.00;
+		}
+
+		return (score * 100/ total);
 	}
 
 	private static JSONFactory _jsonFactory;
