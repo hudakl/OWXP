@@ -1,11 +1,15 @@
 package com.liferay.micro.maintainance.task;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.liferay.micro.maintainance.action.Action;
+import com.liferay.micro.maintainance.action.NotifyCreatorAction;
 import com.liferay.micro.maintainance.analysis.model.AnalysisEntry;
 import com.liferay.micro.maintainance.task.model.CandidateMaintenance;
+import com.liferay.micro.maintainance.util.VoteConstants;
+import com.liferay.micro.maintainance.util.VotesJSONSerializer;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 
 public class OutdatedTask implements Task {
 
@@ -23,8 +27,24 @@ public class OutdatedTask implements Task {
 
 	@Override
 	public List<Action> analyze(AnalysisEntry analysisEntry) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Action> actions = new ArrayList<Action>();
+
+		double percentageYesVotes =VotesJSONSerializer.getVotePercentage(
+				analysisEntry.getAnalysisData(), VoteConstants.YES_DESCRIPTION);
+		
+		int totalUsers = UserLocalServiceUtil.getUsersCount();
+		int totalVotedUsers = VotesJSONSerializer.getTotalVotes(analysisEntry.getAnalysisData());
+		double percentageVoted = 0.00;
+
+		if(totalVotedUsers > 0) {
+			percentageVoted = (totalVotedUsers * 100/ totalUsers);
+		}
+
+		if(percentageVoted > 5 && percentageYesVotes > 5) {
+			actions.add(new NotifyCreatorAction());
+		}
+
+		return actions;
 	}
 
 	@Override

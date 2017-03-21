@@ -144,7 +144,7 @@ public class TaskHandler {
 		if(analysisUser != null) {
 			return analysisUser.getVoted();
 		}
-		
+
 		AnalysisUserLocalServiceUtil.addAnalysisUser(
 			analysisId, userId, VoteConstants.NOT_VOTED);
 
