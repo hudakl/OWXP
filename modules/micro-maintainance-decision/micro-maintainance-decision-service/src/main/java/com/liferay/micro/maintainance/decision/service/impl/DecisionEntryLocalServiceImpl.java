@@ -14,14 +14,28 @@
 
 package com.liferay.micro.maintainance.decision.service.impl;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.liferay.micro.maintainance.candidate.model.CandidateEntry;
 import com.liferay.micro.maintainance.candidate.service.CandidateEntryLocalServiceUtil;
 import com.liferay.micro.maintainance.decision.model.DecisionEntry;
 import com.liferay.micro.maintainance.decision.service.base.DecisionEntryLocalServiceBaseImpl;
+import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Hits;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.search.QueryConfig;
+import com.liferay.portal.kernel.search.SearchContext;
+import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.service.WikiPageLocalServiceUtil;
 
@@ -89,4 +103,86 @@ public class DecisionEntryLocalServiceImpl
 
 		return decision;
 	}
+
+	@Override
+	public List<DecisionEntry> search(long companyId, boolean handled){
+
+		return decisionEntryPersistence.findByC_H(companyId, handled);
+	}
+
+	@Override
+	public List<DecisionEntry> findByWikiPageName(String wikiPageName) {
+
+		return decisionEntryPersistence.findByWikiPageName(wikiPageName);
+	}
+
+	@Override
+	public Hits search(long companyId, long groupId,
+			String wikiPageName, Long userId, String userName, Date createDate, boolean handled, int status,
+			boolean andSearch, int start,
+			int end, Sort sort) {
+		Indexer<DecisionEntry> indexer = IndexerRegistryUtil.getIndexer(
+				DecisionEntry.class.getName());
+		
+		SearchContext searchContext = buildSearchContext(companyId, groupId,
+				wikiPageName, userId, userName, createDate, handled, status,
+				andSearch, start,
+				end, sort);
+		
+		return indexer.search(searchContext);
+	}
+	
+	protected SearchContext buildSearchContext(
+			long companyId, long groupId,
+			String wikiPageName, Long userId, String userName, Date createDate, boolean handled,
+			int status, boolean andSearch, int start,
+			int end, Sort sort) {
+
+			SearchContext searchContext = new SearchContext();
+
+			searchContext.setAndSearch(andSearch);
+
+			Map<String, Serializable> attributes = new HashMap<>();
+
+			if(Validator.isNotNull(wikiPageName)){
+				attributes.put("wikipagename", wikiPageName);
+			}
+
+			if(Validator.isNotNull(userName)) {
+				attributes.put("username", userName);
+			}
+
+			if(Validator.isNotNull(userId)) {
+				attributes.put("userId", userName);
+			}
+
+			if(Validator.isNotNull(createDate)) {
+				attributes.put("createdate", createDate);
+			}
+
+			attributes.put("handled", handled);
+			//attributes.put(Field.CLASS_NAME_ID, classNameId);
+			attributes.put(Field.STATUS, status);
+
+			searchContext.setAttributes(attributes);
+
+			searchContext.setCompanyId(companyId);
+			searchContext.setEnd(end);
+			searchContext.setGroupIds(new long[] {groupId});
+
+			QueryConfig queryConfig = new QueryConfig();
+
+			queryConfig.setHighlightEnabled(false);
+			queryConfig.setScoreEnabled(false);
+
+			searchContext.setQueryConfig(queryConfig);
+
+			if (sort != null) {
+				searchContext.setSorts(sort);
+			}
+
+			searchContext.setStart(start);
+
+			return searchContext;
+		}
 }
