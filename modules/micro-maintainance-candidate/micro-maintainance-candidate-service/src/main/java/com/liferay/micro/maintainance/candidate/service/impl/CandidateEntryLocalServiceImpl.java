@@ -76,27 +76,31 @@ public class CandidateEntryLocalServiceImpl
 	public CandidateEntry addCandidateEntry(
 			long userId, long groupId, long wikiPageId, long taskId) 
 		throws PortalException {
-		
-		User user = userPersistence.findByPrimaryKey(userId);
-		long candidateId = counterLocalService.increment();
-		Date now = new Date();
 
-		CandidateEntry candidate = candidateEntryPersistence.create(candidateId);
+		CandidateEntry candidate = getCandidateByWikiPageId(wikiPageId);
 
-		candidate.setGroupId(groupId);
-
-		candidate.setCompanyId(user.getCompanyId());
-		candidate.setUserId(userId);
-		candidate.setUserName(user.getFullName());
-		candidate.setCreateDate(now);
-		candidate.setModifiedDate(now);
-
-		candidate.setWikiPageId(wikiPageId);
-
-		candidateEntryPersistence.update(candidate);
+		if(candidate == null) {
+			User user = userPersistence.findByPrimaryKey(userId);
+			long candidateId = counterLocalService.increment();
+			Date now = new Date();
+	
+			candidate = candidateEntryPersistence.create(candidateId);
+	
+			candidate.setGroupId(groupId);
+	
+			candidate.setCompanyId(user.getCompanyId());
+			candidate.setUserId(userId);
+			candidate.setUserName(user.getFullName());
+			candidate.setCreateDate(now);
+			candidate.setModifiedDate(now);
+	
+			candidate.setWikiPageId(wikiPageId);
+	
+			candidateEntryPersistence.update(candidate);
+		}
 
 		CandidateMaintenance canMain = CandidateMaintenanceLocalServiceUtil
-			.addCandidateMaintenance(candidateId, taskId);
+			.addCandidateMaintenance(candidate.getEntryId(), taskId);
 
 		AnalysisEntry analysisEntry = AnalysisEntryLocalServiceUtil
 			.addAnalysisEntry(userId, canMain.getCandidateMaintenanceId());
