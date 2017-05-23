@@ -131,8 +131,13 @@ public class LinkedPagesView {
 	}
 
 	private void _addLinksHTML(String content) {
-		while (content.indexOf(_GROW_URL) > 0) {
-			content = content.substring(content.indexOf(_GROW_URL));
+		content = content.replace(CharPool.NEW_LINE, CharPool.SPACE)
+			.trim().replaceAll(" +", " ");
+
+		String growHref = "<a href=\"" + _GROW_URL;
+
+		while (content.indexOf(growHref) > 0) {
+			content = content.substring(content.indexOf(growHref));
 
 			String link = content.substring(0, content.indexOf("\">"));
 
