@@ -80,8 +80,8 @@ public class OutdatedTask implements Task, AutoFlaggable {
 		return actions;
 	}
 
-	public int getMaxViewCount() {
-		return _maxViewCount;
+	public int getRequiredViewCountForAutoFlagging() {
+		return _requiredViewCountForAutoFlagging;
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public class OutdatedTask implements Task, AutoFlaggable {
 
 			String[] assetTags = assetEntry.getTagNames();
 
-			if (assetEntry.getViewCount() > _maxViewCount) {
+			if (assetEntry.getViewCount() > _requiredViewCountForAutoFlagging) {
 				return false;
 			}
 
@@ -171,8 +171,10 @@ public class OutdatedTask implements Task, AutoFlaggable {
 		return false;
 	}
 
-	public void setMaxViewCount(int maxViewCount) {
-		_maxViewCount = maxViewCount;
+	public void setRequiredViewCountForAutoFlagging(
+		int requiredViewCountForAutoFlagging) {
+
+		_requiredViewCountForAutoFlagging = requiredViewCountForAutoFlagging;
 	}
 
 	public void setRequiredVotingPercentage(int requiredVotingPercentage) {
@@ -213,7 +215,7 @@ public class OutdatedTask implements Task, AutoFlaggable {
 	private static OutdatedTask _outdatedTask;
 
 	private String _outcome = "";
-	private int _maxViewCount = 0;
+	private int _requiredViewCountForAutoFlagging = 0;
 	private int _requiredVotingPercentage;
 	private int _requiredVotingPercentageAutoFlagged;
 	private int _requiredYesVotesPercentage;
