@@ -147,7 +147,13 @@ public class CandidateEntryLocalServiceImpl
 	@Override
 	public boolean isCandidateAutoFlagged(CandidateEntry candidateEntry)
 			throws PortalException {
-		return candidateEntry.getUserName().equals(GrowUtil.GLADOS_NAME);
+		User glados = GrowUtil.getGladosUser();
+
+		if (glados == null) {
+			return false;
+		}
+
+		return candidateEntry.getUserName().equals(glados.getScreenName());
 	}
 
 	@Override
