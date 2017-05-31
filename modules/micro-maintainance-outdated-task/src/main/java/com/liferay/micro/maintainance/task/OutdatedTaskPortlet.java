@@ -93,6 +93,9 @@ public class OutdatedTaskPortlet extends GenericPortlet {
 			_configuration.votingPeriodDaysAutoFlagged());
 		_outdatedTask.setRequiredViewCountForAutoFlagging(
 			_configuration.requiredViewCountForAutoFlagging());
+
+		_outdatedTask.setRequiredTagFragments(
+			_configuration.requiredTagFragments());
 	}
 
 	private static OutdatedTask _outdatedTask;

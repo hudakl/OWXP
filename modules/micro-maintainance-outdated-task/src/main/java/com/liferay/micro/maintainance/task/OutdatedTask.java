@@ -105,6 +105,10 @@ public class OutdatedTask implements Task, AutoFlaggable {
 		return _requiredYesVotesPercentageAutoFlagged;
 	}
 
+	public String[] getRequiredTagFragments() {
+		return _requiredTagFragments;
+	}
+
 	@Override
 	public long getTaskId() {
 		return _taskId;
@@ -147,8 +151,15 @@ public class OutdatedTask implements Task, AutoFlaggable {
 			}
 
 			for (String tag : assetTags) {
-				if (tag.contains("import_")) {
-					isAutoFlaggable = true;
+				for (String requiredTag: _requiredTagFragments) {
+					if (tag.toLowerCase().contains(requiredTag.toLowerCase())) {
+						isAutoFlaggable = true;
+						break;
+					}
+				}
+
+				if(isAutoFlaggable) {
+					break;
 				}
 			}
 		} catch (PortalException e) {
@@ -195,7 +206,7 @@ public class OutdatedTask implements Task, AutoFlaggable {
 	}
 
 	public void setVotingPeriodDaysAutoFlagged(int votingPeriodDays) {
-		_votingPeriodDays = votingPeriodDays;
+		_votingPeriodDaysAutoFlagged = votingPeriodDays;
 	}
 
 	public void setRequiredVotingPercentageAutoFlagged(int _requiredVotingPercentageAutoFlagged) {
@@ -204,6 +215,10 @@ public class OutdatedTask implements Task, AutoFlaggable {
 
 	public void setRequiredYesVotesPercentageAutoFlagged(int _requiredYesVotesPercentageAutoFlagged) {
 		this._requiredYesVotesPercentageAutoFlagged = _requiredYesVotesPercentageAutoFlagged;
+	}
+
+	public void setRequiredTagFragments(String _requiredTagFragments) {
+		this._requiredTagFragments = _requiredTagFragments.split(", ");
 	}
 
 	protected OutdatedTask() {
@@ -220,6 +235,7 @@ public class OutdatedTask implements Task, AutoFlaggable {
 	private int _requiredVotingPercentageAutoFlagged;
 	private int _requiredYesVotesPercentage;
 	private int _requiredYesVotesPercentageAutoFlagged;
+	private String[] _requiredTagFragments;
 	private long _taskId = 0;
 	private int _votingPeriodDays;
 	private int _votingPeriodDaysAutoFlagged;

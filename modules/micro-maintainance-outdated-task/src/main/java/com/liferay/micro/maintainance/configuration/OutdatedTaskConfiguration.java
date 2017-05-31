@@ -32,4 +32,6 @@ public interface OutdatedTaskConfiguration {
 	@Meta.AD(deflt = "30", required = false)
 	public int votingPeriodDaysAutoFlagged();
 
+	@Meta.AD(deflt = "import_", required = false)
+	public String requiredTagFragments();
 }

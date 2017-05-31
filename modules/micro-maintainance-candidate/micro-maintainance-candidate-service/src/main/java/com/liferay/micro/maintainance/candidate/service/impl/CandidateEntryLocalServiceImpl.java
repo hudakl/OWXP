@@ -153,7 +153,7 @@ public class CandidateEntryLocalServiceImpl
 			return false;
 		}
 
-		return candidateEntry.getUserName().equals(glados.getScreenName());
+		return candidateEntry.getUserName().equals(glados.getFullName());
 	}
 
 	@Override
