@@ -3,9 +3,9 @@ package com.liferay.micro.maintainance.util;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.wiki.model.WikiNode;
 import com.liferay.wiki.service.WikiNodeLocalServiceUtil;
 
@@ -14,7 +14,7 @@ public class GrowUtil {
 	public static User getGladosUser() {
 		if (_glados == null) {
 			_glados = UserLocalServiceUtil.fetchUserByScreenName(
-				CompanyThreadLocal.getCompanyId(), GLADOS_NAME);
+				PortalUtil.getDefaultCompanyId(), GLADOS_NAME);
 		}
 
 		return _glados;
@@ -25,7 +25,7 @@ public class GrowUtil {
 			Group growGroup;
 			try {
 				growGroup = GroupLocalServiceUtil.getCompanyGroup(
-					CompanyThreadLocal.getCompanyId());
+					PortalUtil.getDefaultCompanyId());
 
 				_grow = WikiNodeLocalServiceUtil.getNode(
 					growGroup.getGroupId(), GROW_NAME);
