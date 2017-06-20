@@ -1,9 +1,10 @@
 package com.liferay.micro.maintainance.util;
 
+import java.util.List;
+
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.wiki.model.WikiNode;
@@ -22,15 +23,15 @@ public class GrowUtil {
 
 	public static WikiNode getGrowNode() {
 		if (_grow == null) {
-			Group growGroup;
-			try {
-				growGroup = GroupLocalServiceUtil.getCompanyGroup(
-					PortalUtil.getDefaultCompanyId());
+			List<WikiNode> allNodes = WikiNodeLocalServiceUtil
+				.getWikiNodes(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-				_grow = WikiNodeLocalServiceUtil.getNode(
-					growGroup.getGroupId(), GROW_NAME);
-			} catch (PortalException e) {
-				e.printStackTrace();
+			for(WikiNode node : allNodes) {
+				if (node.getName().toLowerCase().equals(GROW_NAME)) {
+					_grow = node;
+
+					break;
+				}
 			}
 		}
 
