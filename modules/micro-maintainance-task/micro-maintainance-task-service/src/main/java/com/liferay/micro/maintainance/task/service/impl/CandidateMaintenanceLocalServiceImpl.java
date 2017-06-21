@@ -76,7 +76,7 @@ public class CandidateMaintenanceLocalServiceImpl
 		candidateMaintenance.setCandidateEntryId(candidateEntryId);
 		candidateMaintenance.setTaskEntryId(taskEntry.getTaskEntryId());
 		candidateMaintenance.setCreateDate(now);
-		
+
 		candidateMaintenancePersistence.update(candidateMaintenance);
 
 		return candidateMaintenance;

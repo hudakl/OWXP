@@ -14,15 +14,11 @@
 
 package com.liferay.micro.maintainance.task.service.impl;
 
-import java.util.List;
-import java.util.Map;
+import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.micro.maintainance.api.Task;
 import com.liferay.micro.maintainance.task.service.base.TaskEntryServiceBaseImpl;
 import com.liferay.micro.maintainance.util.TaskHandlerUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-
-import aQute.bnd.annotation.ProviderType;
 
 /**
  * The implementation of the task entry remote service.
@@ -43,7 +39,7 @@ public class TaskEntryServiceImpl extends TaskEntryServiceBaseImpl {
 
 	@Override
 	public int getVote(long userId, long wikiPageId, long taskId)
-			throws PortalException {
+		throws PortalException {
 
 		return TaskHandlerUtil.getVote(userId, wikiPageId, taskId);
 	}
@@ -54,4 +50,5 @@ public class TaskEntryServiceImpl extends TaskEntryServiceBaseImpl {
 
 		TaskHandlerUtil.vote(userId, wikiPageId, taskId, vote);
 	}
+
 }
