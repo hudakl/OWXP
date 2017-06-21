@@ -1,15 +1,5 @@
 package com.liferay.micro.maintainance.task.scheduler;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Modified;
-import org.osgi.service.component.annotations.Reference;
-
 import com.liferay.micro.maintainance.action.ActionHandler;
 import com.liferay.micro.maintainance.analysis.model.AnalysisEntry;
 import com.liferay.micro.maintainance.analysis.service.AnalysisEntryLocalServiceUtil;
@@ -38,6 +28,16 @@ import com.liferay.portal.kernel.scheduler.StorageTypeAware;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
 import com.liferay.portal.kernel.util.ListUtil;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Rimi Saadou
@@ -155,25 +155,25 @@ public class TaskMessageListener extends BaseSchedulerEntryMessageListener {
 		Map<Long, Task> registeredTasks = _taskHandler.getTaskEntries();
 
 		for (CandidateMaintenance candidateMaintenance : runningVotes) {
-			Task task = registeredTasks
-				.get(candidateMaintenance.getTaskEntryId());
+			Task task = registeredTasks.get(
+				candidateMaintenance.getTaskEntryId());
 
 			boolean autoFlagged = false;
 			boolean isAnalyseReady = false;
 
 			AutoFlaggable autoFlaggableTask = null;
 
-			if(task instanceof AutoFlaggable) {
-				autoFlaggableTask = (AutoFlaggable) task;
+			if (task instanceof AutoFlaggable) {
+				autoFlaggableTask = (AutoFlaggable)task;
 
-				autoFlagged = CandidateEntryLocalServiceUtil
-					.isCandidateAutoFlagged(
+				autoFlagged =
+					CandidateEntryLocalServiceUtil.isCandidateAutoFlagged(
 						candidateMaintenance.getCandidateEntryId());
 			}
 
 			if (autoFlagged) {
-				isAnalyseReady = autoFlaggableTask
-					.isAutoFlaggedAnalyseReady(candidateMaintenance);
+				isAnalyseReady = autoFlaggableTask.isAutoFlaggedAnalyseReady(
+					candidateMaintenance);
 			}
 			else {
 				isAnalyseReady = task.isAnalyseReady(candidateMaintenance);
@@ -185,11 +185,11 @@ public class TaskMessageListener extends BaseSchedulerEntryMessageListener {
 						.getAnalysisByCandidateMaintenance(
 						candidateMaintenance.getCandidateMaintenanceId());
 
-				List<Action> actions = null; 
+				List<Action> actions = null;
 
 				if (autoFlagged) {
-					actions = autoFlaggableTask
-						.autoFlaggedAnalyze(analysisEntry);
+					actions = autoFlaggableTask.autoFlaggedAnalyze(
+						analysisEntry);
 				}
 				else {
 					actions = task.analyze(analysisEntry);

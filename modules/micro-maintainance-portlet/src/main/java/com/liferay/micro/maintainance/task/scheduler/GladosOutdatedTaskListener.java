@@ -1,17 +1,5 @@
 package com.liferay.micro.maintainance.task.scheduler;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Modified;
-import org.osgi.service.component.annotations.Reference;
-
 import com.liferay.micro.maintainance.api.AutoFlaggable;
 import com.liferay.micro.maintainance.api.Task;
 import com.liferay.micro.maintainance.api.TaskHandler;
@@ -37,6 +25,18 @@ import com.liferay.portal.kernel.scheduler.TriggerFactory;
 import com.liferay.wiki.model.WikiNode;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.service.WikiPageLocalServiceUtil;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Rimi Saadou
@@ -154,7 +154,6 @@ public class GladosOutdatedTaskListener
 	 */
 	@Override
 	protected void doReceive(Message message) throws Exception {
-
 		List<AutoFlaggable> autoFlaggableTasks = getAutoFlaggableTasks();
 
 		List<CandidateEntry> candidates =
@@ -166,7 +165,7 @@ public class GladosOutdatedTaskListener
 
 		WikiNode wikiNode = GrowUtil.getGrowNode();
 
-		if(wikiNode == null) {
+		if (wikiNode == null) {
 			if (_log.isInfoEnabled()) {
 				_log.info("Grow node is not available.");
 			}
@@ -175,13 +174,12 @@ public class GladosOutdatedTaskListener
 		}
 
 		List<WikiPage> wikiPages = WikiPageLocalServiceUtil.getPages(
-			wikiNode.getNodeId(), true, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS);
+			wikiNode.getNodeId(), true, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
 		for (WikiPage wikiPage : wikiPages) {
 			if (!wikiPageIds.contains(wikiPage.getPageId())) {
-				for(AutoFlaggable task : autoFlaggableTasks) {
-					if(task.isAutoFlaggable(wikiPage)) {
+				for (AutoFlaggable task : autoFlaggableTasks) {
+					if (task.isAutoFlaggable(wikiPage)) {
 						User glados = GrowUtil.getGladosUser();
 
 						if (glados != null) {
@@ -254,11 +252,11 @@ public class GladosOutdatedTaskListener
 	private List<AutoFlaggable> getAutoFlaggableTasks() {
 		Map<Long, Task> registeredTasks = _taskHandler.getTaskEntries();
 
-		List<AutoFlaggable> autoFlaggableTasks = new ArrayList<AutoFlaggable>();
+		List<AutoFlaggable> autoFlaggableTasks = new ArrayList<>();
 
-		for(Task task : registeredTasks.values()) {
+		for (Task task : registeredTasks.values()) {
 			if (task instanceof AutoFlaggable) {
-				autoFlaggableTasks.add((AutoFlaggable) task);
+				autoFlaggableTasks.add((AutoFlaggable)task);
 			}
 		}
 

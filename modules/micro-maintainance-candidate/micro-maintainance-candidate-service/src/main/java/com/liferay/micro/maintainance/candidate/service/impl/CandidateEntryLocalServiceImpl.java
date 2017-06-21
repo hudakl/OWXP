@@ -146,7 +146,8 @@ public class CandidateEntryLocalServiceImpl
 
 	@Override
 	public boolean isCandidateAutoFlagged(CandidateEntry candidateEntry)
-			throws PortalException {
+		throws PortalException {
+
 		User glados = GrowUtil.getGladosUser();
 
 		if (glados == null) {
@@ -159,8 +160,10 @@ public class CandidateEntryLocalServiceImpl
 	@Override
 	public boolean isCandidateAutoFlagged(long candidateEntryId)
 		throws PortalException {
+
 		CandidateEntry candidateEntry = getCandidateEntry(candidateEntryId);
 
 		return isCandidateAutoFlagged(candidateEntry);
 	}
+
 }

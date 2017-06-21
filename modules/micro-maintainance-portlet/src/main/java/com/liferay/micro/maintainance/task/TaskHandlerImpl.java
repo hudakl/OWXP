@@ -80,10 +80,9 @@ public class TaskHandlerImpl implements TaskHandler {
 		}
 
 		for (Task task : _registeredTasks.values()) {
-			if (CandidateMaintenanceLocalServiceUtil.
-					getCandidateMaintenaceTask(
-						candidateEntry.getCandidateEntryId(),
-						task.getTaskId()) != null) {
+			if (CandidateMaintenanceLocalServiceUtil.getCandidateMaintenaceTask(
+					candidateEntry.getCandidateEntryId(),
+					task.getTaskId()) != null) {
 
 				runningVotes.add(task);
 			}

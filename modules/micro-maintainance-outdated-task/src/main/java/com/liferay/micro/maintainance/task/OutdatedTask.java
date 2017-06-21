@@ -1,8 +1,4 @@
-package com.liferay.micro.maintainance.task;	
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+package com.liferay.micro.maintainance.task;
 
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.service.AssetEntryLocalServiceUtil;
@@ -16,9 +12,13 @@ import com.liferay.micro.maintainance.util.VoteCalculations;
 import com.liferay.micro.maintainance.util.VoteConstants;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.wiki.model.WikiPage;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Rimi Saadou
@@ -51,6 +51,7 @@ public class OutdatedTask implements Task, AutoFlaggable {
 
 		if ((percentageVoted > _requiredVotingPercentage) &&
 			(percentageYesVotes > _requiredYesVotesPercentage)) {
+
 			actions.add(new NotifyCreatorAction());
 		}
 
@@ -74,19 +75,24 @@ public class OutdatedTask implements Task, AutoFlaggable {
 
 		if ((percentageVoted > _requiredVotingPercentageAutoFlagged) &&
 			(percentageYesVotes > _requiredYesVotesPercentageAutoFlagged)) {
+
 			actions.add(new NotifyCreatorAction());
 		}
 
 		return actions;
 	}
 
-	public int getRequiredViewCountForAutoFlagging() {
-		return _requiredViewCountForAutoFlagging;
-	}
-
 	@Override
 	public String getOutcome() {
 		return _outcome;
+	}
+
+	public String[] getRequiredTagFragments() {
+		return _requiredTagFragments;
+	}
+
+	public int getRequiredViewCountForAutoFlagging() {
+		return _requiredViewCountForAutoFlagging;
 	}
 
 	public int getRequiredVotingPercentage() {
@@ -103,10 +109,6 @@ public class OutdatedTask implements Task, AutoFlaggable {
 
 	public int getRequiredYesVotesPercentageAutoFlagged() {
 		return _requiredYesVotesPercentageAutoFlagged;
-	}
-
-	public String[] getRequiredTagFragments() {
-		return _requiredTagFragments;
 	}
 
 	@Override
@@ -151,14 +153,16 @@ public class OutdatedTask implements Task, AutoFlaggable {
 			}
 
 			for (String tag : assetTags) {
-				for (String requiredTag: _requiredTagFragments) {
-					if (tag.toLowerCase().contains(requiredTag.toLowerCase())) {
+				for (String requiredTag : _requiredTagFragments) {
+					if (StringUtil.toLowerCase(tag).contains(
+							StringUtil.toLowerCase(requiredTag))) {
+
 						isAutoFlaggable = true;
 						break;
 					}
 				}
 
-				if(isAutoFlaggable) {
+				if (isAutoFlaggable) {
 					break;
 				}
 			}
@@ -170,7 +174,9 @@ public class OutdatedTask implements Task, AutoFlaggable {
 	}
 
 	@Override
-	public boolean isAutoFlaggedAnalyseReady(CandidateMaintenance candidateMaintenance) {
+	public boolean isAutoFlaggedAnalyseReady(
+		CandidateMaintenance candidateMaintenance) {
+
 		Date now = new Date();
 
 		if (DateUtil.getDaysBetween(now, candidateMaintenance.getCreateDate()) >
@@ -180,6 +186,10 @@ public class OutdatedTask implements Task, AutoFlaggable {
 		}
 
 		return false;
+	}
+
+	public void setRequiredTagFragments(String _requiredTagFragments) {
+		this._requiredTagFragments = _requiredTagFragments.split(", ");
 	}
 
 	public void setRequiredViewCountForAutoFlagging(
@@ -192,8 +202,22 @@ public class OutdatedTask implements Task, AutoFlaggable {
 		_requiredVotingPercentage = requiredVotingPercentage;
 	}
 
+	public void setRequiredVotingPercentageAutoFlagged(
+		int _requiredVotingPercentageAutoFlagged) {
+
+		this._requiredVotingPercentageAutoFlagged =
+			_requiredVotingPercentageAutoFlagged;
+	}
+
 	public void setRequiredYesVotesPercentage(int requiredYesVotesPercentage) {
 		_requiredYesVotesPercentage = requiredYesVotesPercentage;
+	}
+
+	public void setRequiredYesVotesPercentageAutoFlagged(
+		int _requiredYesVotesPercentageAutoFlagged) {
+
+		this._requiredYesVotesPercentageAutoFlagged =
+			_requiredYesVotesPercentageAutoFlagged;
 	}
 
 	@Override
@@ -209,18 +233,6 @@ public class OutdatedTask implements Task, AutoFlaggable {
 		_votingPeriodDaysAutoFlagged = votingPeriodDays;
 	}
 
-	public void setRequiredVotingPercentageAutoFlagged(int _requiredVotingPercentageAutoFlagged) {
-		this._requiredVotingPercentageAutoFlagged = _requiredVotingPercentageAutoFlagged;
-	}
-
-	public void setRequiredYesVotesPercentageAutoFlagged(int _requiredYesVotesPercentageAutoFlagged) {
-		this._requiredYesVotesPercentageAutoFlagged = _requiredYesVotesPercentageAutoFlagged;
-	}
-
-	public void setRequiredTagFragments(String _requiredTagFragments) {
-		this._requiredTagFragments = _requiredTagFragments.split(", ");
-	}
-
 	protected OutdatedTask() {
 		_taskId = 0;
 	}
@@ -230,12 +242,12 @@ public class OutdatedTask implements Task, AutoFlaggable {
 	private static OutdatedTask _outdatedTask;
 
 	private String _outcome = "";
+	private String[] _requiredTagFragments;
 	private int _requiredViewCountForAutoFlagging = 0;
 	private int _requiredVotingPercentage;
 	private int _requiredVotingPercentageAutoFlagged;
 	private int _requiredYesVotesPercentage;
 	private int _requiredYesVotesPercentageAutoFlagged;
-	private String[] _requiredTagFragments;
 	private long _taskId = 0;
 	private int _votingPeriodDays;
 	private int _votingPeriodDaysAutoFlagged;
