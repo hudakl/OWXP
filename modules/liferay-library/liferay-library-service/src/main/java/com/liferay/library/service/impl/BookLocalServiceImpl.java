@@ -14,9 +14,15 @@
 
 package com.liferay.library.service.impl;
 
-import aQute.bnd.annotation.ProviderType;
+import java.util.Date;
 
+import com.liferay.library.model.Book;
 import com.liferay.library.service.base.BookLocalServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+
+import aQute.bnd.annotation.ProviderType;
 
 /**
  * The implementation of the book local service.
@@ -34,9 +40,69 @@ import com.liferay.library.service.base.BookLocalServiceBaseImpl;
  */
 @ProviderType
 public class BookLocalServiceImpl extends BookLocalServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this class directly. Always use {@link com.liferay.library.service.BookLocalServiceUtil} to access the book local service.
-	 */
+	
+	@Override
+	public Book addBook(
+			long userId, String author, String bookTitle, int quantity)
+		throws PortalException {
+
+		User user = UserLocalServiceUtil.getUser(userId);
+		long bookId = counterLocalService.increment();
+		Date now = new Date();
+
+		Book book = bookPersistence.create(bookId);
+
+		book.setAuthor(author);
+		book.setBookTitle(bookTitle);
+		book.setQuantity(quantity);
+		book.setBorrowed(0);
+
+		book.setCompanyId(user.getCompanyId());
+		book.setUserId(userId);
+		book.setUserName(user.getFullName());
+		book.setCreateDate(now);
+		book.setModifiedDate(now);
+
+		return bookPersistence.update(book);
+	}
+
+	@Override
+	public Book borrowBook(long bookId)
+		throws PortalException {
+
+		Book book = bookPersistence.findByPrimaryKey(bookId);
+
+		int quantity = book.getQuantity();
+		int borrowed = book.getBorrowed();
+
+		if (quantity == borrowed) {
+			throw new PortalException("All the books are borrowed.");
+		}
+
+		book.setBorrowed(++borrowed);
+
+		return bookPersistence.update(book);
+	}
+
+	@Override
+	public Book updateBook(
+			long bookId, long userId, String author, String bookTitle,
+			int quantity)
+		throws PortalException {
+
+		Book book = bookPersistence.findByPrimaryKey(bookId);
+		User user = UserLocalServiceUtil.getUser(userId);
+		Date now = new Date();
+
+		book.setAuthor(author);
+		book.setBookTitle(bookTitle);
+		book.setQuantity(quantity);
+
+		book.setCompanyId(user.getCompanyId());
+		book.setUserId(userId);
+		book.setUserName(user.getFullName());
+		book.setModifiedDate(now);
+
+		return bookPersistence.update(book);
+	}
 }
