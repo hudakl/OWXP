@@ -44,6 +44,19 @@ public class BookLocalServiceWrapper implements BookLocalService,
 		return _bookLocalService.addBook(book);
 	}
 
+	@Override
+	public com.liferay.library.model.Book addBook(long userId,
+		java.lang.String author, java.lang.String bookTitle, int quantity)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bookLocalService.addBook(userId, author, bookTitle, quantity);
+	}
+
+	@Override
+	public com.liferay.library.model.Book borrowBook(long bookId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bookLocalService.borrowBook(bookId);
+	}
+
 	/**
 	* Creates a new book with the primary key. Does not add the book to the database.
 	*
@@ -136,6 +149,14 @@ public class BookLocalServiceWrapper implements BookLocalService,
 	public com.liferay.library.model.Book updateBook(
 		com.liferay.library.model.Book book) {
 		return _bookLocalService.updateBook(book);
+	}
+
+	@Override
+	public com.liferay.library.model.Book updateBook(long bookId, long userId,
+		java.lang.String author, java.lang.String bookTitle, int quantity)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bookLocalService.updateBook(bookId, userId, author, bookTitle,
+			quantity);
 	}
 
 	@Override

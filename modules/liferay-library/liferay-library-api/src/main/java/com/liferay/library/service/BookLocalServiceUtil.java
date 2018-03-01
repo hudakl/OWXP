@@ -53,6 +53,17 @@ public class BookLocalServiceUtil {
 		return getService().addBook(book);
 	}
 
+	public static com.liferay.library.model.Book addBook(long userId,
+		java.lang.String author, java.lang.String bookTitle, int quantity)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().addBook(userId, author, bookTitle, quantity);
+	}
+
+	public static com.liferay.library.model.Book borrowBook(long bookId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().borrowBook(bookId);
+	}
+
 	/**
 	* Creates a new book with the primary key. Does not add the book to the database.
 	*
@@ -137,6 +148,14 @@ public class BookLocalServiceUtil {
 	public static com.liferay.library.model.Book updateBook(
 		com.liferay.library.model.Book book) {
 		return getService().updateBook(book);
+	}
+
+	public static com.liferay.library.model.Book updateBook(long bookId,
+		long userId, java.lang.String author, java.lang.String bookTitle,
+		int quantity)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .updateBook(bookId, userId, author, bookTitle, quantity);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {

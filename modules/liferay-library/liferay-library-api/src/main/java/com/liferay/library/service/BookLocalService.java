@@ -73,6 +73,11 @@ public interface BookLocalService extends BaseLocalService,
 	@Indexable(type = IndexableType.REINDEX)
 	public Book addBook(Book book);
 
+	public Book addBook(long userId, java.lang.String author,
+		java.lang.String bookTitle, int quantity) throws PortalException;
+
+	public Book borrowBook(long bookId) throws PortalException;
+
 	/**
 	* Creates a new book with the primary key. Does not add the book to the database.
 	*
@@ -144,6 +149,9 @@ public interface BookLocalService extends BaseLocalService,
 	*/
 	@Indexable(type = IndexableType.REINDEX)
 	public Book updateBook(Book book);
+
+	public Book updateBook(long bookId, long userId, java.lang.String author,
+		java.lang.String bookTitle, int quantity) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
